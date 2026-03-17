@@ -1,0 +1,289 @@
+:root {
+  color-scheme: dark;
+  --bg-0: #040916;
+  --bg-1: #09111f;
+  --panel: rgba(15, 23, 42, 0.76);
+  --panel-border: rgba(148, 163, 184, 0.16);
+  --panel-shadow: 0 24px 80px rgba(15, 23, 42, 0.42);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-2: #22c55e;
+  --ring: rgba(56, 189, 248, 0.26);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.24), transparent 34%),
+    radial-gradient(circle at 85% 18%, rgba(34, 197, 94, 0.16), transparent 22%),
+    linear-gradient(160deg, var(--bg-0), var(--bg-1) 58%, #020617);
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  width: min(920px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 40px 0 56px;
+  display: grid;
+  gap: 18px;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--panel-shadow);
+  backdrop-filter: blur(14px);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 30%);
+  pointer-events: none;
+}
+
+.hero {
+  padding: 34px 34px 30px;
+}
+
+.eyebrow,
+.section-kicker {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+  max-width: 12ch;
+}
+
+.lede {
+  margin-bottom: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.settings-panel,
+.roadmap-panel {
+  padding: 26px 28px 24px;
+}
+
+.panel-head {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.panel-head h2,
+.roadmap-panel h2 {
+  margin-bottom: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+}
+
+.shortcut-badge {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  color: #dbeafe;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.preset-form {
+  margin: 0;
+}
+
+.preset-list {
+  display: grid;
+  gap: 12px;
+}
+
+.preset-option {
+  display: grid;
+}
+
+.preset-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preset-card {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.58);
+  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  cursor: pointer;
+}
+
+.preset-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.preset-input:focus-visible + .preset-card {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.preset-input:checked + .preset-card {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.18), inset 0 0 0 1px rgba(56, 189, 248, 0.1);
+}
+
+.preset-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.preset-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #bae6fd;
+  background: rgba(56, 189, 248, 0.14);
+  font-size: 0.8rem;
+}
+
+.preset-copy {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.support-row {
+  margin-top: 18px;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.support-label {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.support-copy {
+  margin-bottom: 0;
+  font-size: 0.96rem;
+}
+
+.text-link {
+  text-decoration: none;
+  font-weight: 650;
+  color: #c7f9ff;
+}
+
+.text-link:hover {
+  color: #f0f9ff;
+}
+
+.roadmap-panel {
+  display: grid;
+  gap: 6px;
+}
+
+.roadmap-list {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.roadmap-list li {
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.roadmap-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.95);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+}
+
+.status {
+  min-height: 1.4em;
+  margin: 0;
+  color: #86efac;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100vw - 20px, 920px);
+    padding-top: 20px;
+  }
+
+  .hero,
+  .settings-panel,
+  .roadmap-panel {
+    padding-inline: 18px;
+  }
+
+  .panel-head,
+  .support-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shortcut-badge {
+    width: fit-content;
+  }
+}

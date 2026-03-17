@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClipSnap Options</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero panel">
+        <p class="eyebrow">ClipSnap</p>
+        <h1>Resize the screenshot before it lands in your clipboard.</h1>
+        <p class="lede">
+          Pick the default preset for visible-tab captures. The shortcut stays editable in Chrome, and the result
+          stays PNG for AI tools and paste targets.
+        </p>
+      </section>
+
+      <section class="panel settings-panel" aria-labelledby="resize-heading">
+        <div class="panel-head">
+          <div>
+            <p class="section-kicker">Capture settings</p>
+            <h2 id="resize-heading">Resize preset</h2>
+          </div>
+          <p class="shortcut-badge" id="shortcut-badge">Alt+Shift+S</p>
+        </div>
+
+        <form id="preset-form" class="preset-form">
+          <div id="preset-list" class="preset-list" role="radiogroup" aria-label="Resize preset"></div>
+        </form>
+
+        <div class="support-row">
+          <div>
+            <p class="support-label">Keyboard shortcut</p>
+            <p class="support-copy" id="shortcut-copy">Open Chrome shortcut settings to customize it.</p>
+          </div>
+          <a class="text-link" href="chrome://extensions/shortcuts" target="_blank" rel="noreferrer">
+            Open shortcuts
+          </a>
+        </div>
+      </section>
+
+      <section class="panel roadmap-panel" aria-labelledby="roadmap-heading">
+        <div class="section-kicker">Roadmap</div>
+        <h2 id="roadmap-heading">Coming soon</h2>
+        <ul class="roadmap-list">
+          <li>Region selection with drag-to-crop</li>
+          <li>Capture delay presets</li>
+          <li>Save to file and export format choices</li>
+          <li>Restricted-page fallback notifications</li>
+        </ul>
+      </section>
+
+      <p id="status" class="status" aria-live="polite"></p>
+    </main>
+
+    <script type="module" src="./options.js"></script>
+  </body>
+</html>

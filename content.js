@@ -2,6 +2,7 @@ const TOAST_HOST_ID = "clipsnap-toast-host";
 const SUCCESS_TITLE = "Screenshot copied";
 const FAILURE_TITLE = "Failed to copy";
 const TOAST_DISMISS_MS = 2400;
+let resizeModulePromise = null;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type !== "clipsnap-copy-screenshot") {
@@ -34,16 +35,12 @@ async function handleCopyRequest(payload) {
     const image = await loadImage(dataUrl);
     const sourceWidth = image.naturalWidth;
     const sourceHeight = image.naturalHeight;
-    const targetWidth =
-      preset.targetWidth != null && image.naturalWidth > preset.targetWidth
-        ? preset.targetWidth < 1
-          ? Math.max(1, Math.round(image.naturalWidth * preset.targetWidth))
-          : preset.targetWidth
-        : image.naturalWidth;
-    const targetHeight =
-      targetWidth === sourceWidth
-        ? sourceHeight
-        : Math.max(1, Math.round((sourceHeight * targetWidth) / sourceWidth));
+    const { resolveTargetSize } = await getResizeModule();
+    const { width: targetWidth, height: targetHeight } = resolveTargetSize(
+      sourceWidth,
+      sourceHeight,
+      preset.targetWidth ?? null
+    );
 
     const canvas = document.createElement("canvas");
     canvas.width = targetWidth;
@@ -231,4 +228,12 @@ function stringifyError(error) {
   }
 
   return String(error.message || error.reason || error);
+}
+
+function getResizeModule() {
+  if (!resizeModulePromise) {
+    resizeModulePromise = import(chrome.runtime.getURL("lib/resize.js"));
+  }
+
+  return resizeModulePromise;
 }

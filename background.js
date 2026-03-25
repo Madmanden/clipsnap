@@ -48,6 +48,14 @@ async function getCurrentPreset() {
   return getPresetById(presetId);
 }
 
+const RESTRICTED_URL_PATTERNS = [
+  /^chrome:\/\//,
+  /^chrome-extension:\/\//,
+  /^about:/,
+];
+
+const RESTRICTED_ERROR = "Cannot capture Chrome internal pages (chrome://, extension pages). Use a native screenshot tool for these.";
+
 async function captureVisibleTabAndCopy(fallbackTab) {
   let activeTabId = null;
 
@@ -57,6 +65,12 @@ async function captureVisibleTabAndCopy(fallbackTab) {
       throw new Error("No active tab available");
     }
     activeTabId = tab.id;
+
+    // Check for restricted URLs before attempting capture
+    if (tab.url && RESTRICTED_URL_PATTERNS.some((pattern) => pattern.test(tab.url))) {
+      showToast("error", "Cannot capture this page", "Chrome extensions can't screenshot internal pages (chrome://, extension settings).");
+      return;
+    }
 
     const preset = await getCurrentPreset();
     const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: "png" });

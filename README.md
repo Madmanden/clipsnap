@@ -38,6 +38,8 @@ Available presets:
 - `960px`
 - `Half`
 
+![Settings](screenshots/Settings.png)
+
 ## Development
 
 No install step is required for normal use, but you can run the test suite locally with:

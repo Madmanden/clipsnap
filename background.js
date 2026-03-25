@@ -153,7 +153,8 @@ async function showRestrictedCaptureNotice(tabId) {
   }
 
   try {
-    await chrome.action.setBadgeText({ tabId, text: "" });
+    await chrome.action.setBadgeBackgroundColor({ tabId, color: "#b91c1c" });
+    await chrome.action.setBadgeText({ tabId, text: "!" });
     await chrome.action.setTitle({
       tabId,
       title: "ClipSnap: This page is restricted by Chrome",

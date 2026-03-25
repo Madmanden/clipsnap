@@ -15,6 +15,12 @@
       "run_at": "document_idle"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/resize.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "action": {
     "default_title": "ClipSnap",
     "default_icon": {

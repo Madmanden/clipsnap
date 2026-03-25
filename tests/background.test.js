@@ -78,7 +78,7 @@ test("restricted pages short-circuit without trying to capture or inject", async
     assert.equal(calls.captureVisibleTab.length, 0);
     assert.equal(calls.executeScript.length, 0);
     assert.equal(calls.sendMessage.length, 0);
-    assert.equal(calls.setBadgeText.at(-1)?.text, "");
+    assert.equal(calls.setBadgeText.at(-1)?.text, "!");
     assert.equal(calls.setTitle.at(-1)?.title, "ClipSnap: This page is restricted by Chrome");
   } finally {
     globalThis.chrome = previousChrome;
@@ -112,7 +112,7 @@ test("restricted internal Chrome pages are detected", async () => {
     assert.equal(calls.captureVisibleTab.length, 0);
     assert.equal(calls.executeScript.length, 0);
     assert.equal(calls.sendMessage.length, 0);
-    assert.equal(calls.setBadgeText.at(-1)?.text, "");
+    assert.equal(calls.setBadgeText.at(-1)?.text, "!");
     assert.equal(calls.setTitle.at(-1)?.title, "ClipSnap: This page is restricted by Chrome");
   } finally {
     globalThis.chrome = previousChrome;

@@ -1,8 +1,19 @@
 # ClipSnap
 
-ClipSnap is a Chrome extension that captures the visible tab and copies a resized PNG to the clipboard instantly.
+ClipSnap captures the visible tab and copies a resized PNG to your clipboard instantly.
 
-It is aimed at developer and power-user workflows where you want to paste a screenshot straight into an AI coding tool, chat app, or email without extra steps.
+Built for developer and power-user workflows, it makes it easy to paste a clean screenshot into AI tools, chat apps, or email without extra steps.
+
+## Screenshot
+
+![ClipSnap options page](screenshots/Settings.png)
+
+## Highlights
+
+- One-click capture from the toolbar icon
+- Keyboard shortcut: `Alt+Shift+S`
+- Automatic resize presets for cleaner pastes
+- Works directly in Chrome with no build step
 
 ## Status
 
@@ -27,7 +38,7 @@ ClipSnap is released under the MIT License.
 - Or press `Alt+Shift+S`.
 - The screenshot is copied to the clipboard as PNG.
 
-## Options
+## Customization
 
 Open the extension options page to change the default resize preset.
 
@@ -37,8 +48,6 @@ Available presets:
 - `1280px`
 - `960px`
 - `Half`
-
-![Settings](screenshots/Settings.png)
 
 ## Development
 

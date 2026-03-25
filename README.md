@@ -10,6 +10,8 @@ ClipSnap is not on the Chrome Web Store yet.
 
 You can install it manually in Chrome using Developer Mode.
 
+ClipSnap is released under the MIT License.
+
 ## Installation
 
 1. Clone or download this repository to your machine.

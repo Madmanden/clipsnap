@@ -54,8 +54,6 @@ const RESTRICTED_URL_PATTERNS = [
   /^about:/,
 ];
 
-const RESTRICTED_ERROR = "Cannot capture Chrome internal pages (chrome://, extension pages). Use a native screenshot tool for these.";
-
 async function captureVisibleTabAndCopy(fallbackTab) {
   let activeTabId = null;
 
@@ -68,7 +66,7 @@ async function captureVisibleTabAndCopy(fallbackTab) {
 
     // Check for restricted URLs before attempting capture
     if (tab.url && RESTRICTED_URL_PATTERNS.some((pattern) => pattern.test(tab.url))) {
-      showToast("error", "Cannot capture this page", "Chrome extensions can't screenshot internal pages (chrome://, extension settings).");
+      await showRestrictedCaptureNotice(activeTabId);
       return;
     }
 
@@ -96,6 +94,8 @@ async function captureVisibleTabAndCopy(fallbackTab) {
     await showActionError(activeTabId, describeError(error));
   }
 }
+
+export { captureVisibleTabAndCopy };
 
 async function sendMessageWithRetry(tabId, message) {
   try {
@@ -144,6 +144,22 @@ async function showActionError(tabId, message) {
     await chrome.action.setTitle({ tabId, title: `ClipSnap: ${message}` });
   } catch (error) {
     console.warn("ClipSnap action badge update failed:", error);
+  }
+}
+
+async function showRestrictedCaptureNotice(tabId) {
+  if (!tabId) {
+    return;
+  }
+
+  try {
+    await chrome.action.setBadgeText({ tabId, text: "" });
+    await chrome.action.setTitle({
+      tabId,
+      title: "ClipSnap: This page is restricted by Chrome",
+    });
+  } catch (error) {
+    console.warn("ClipSnap restricted-page notice failed:", error);
   }
 }
 

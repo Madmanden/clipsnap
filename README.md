@@ -4,6 +4,8 @@ ClipSnap captures the visible tab and copies a resized PNG to your clipboard ins
 
 Built for developer and power-user workflows, it makes it easy to paste a clean screenshot into AI tools, chat apps, or email without extra steps.
 
+**More tools:** [christianholmdev.dk/tools](https://christianholmdev.dk/tools/)
+
 ## Screenshot
 
 ![ClipSnap options page](screenshots/Settings.png)

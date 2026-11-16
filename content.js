@@ -1,10 +1,22 @@
+// Injected on demand by background.js; the guard keeps repeated injections from
+// registering duplicate listeners or redeclaring top-level bindings.
+if (!globalThis.__clipsnapContentLoaded) {
+  globalThis.__clipsnapContentLoaded = true;
+
 const TOAST_HOST_ID = "clipsnap-toast-host";
 const SUCCESS_TITLE = "Screenshot copied";
 const FAILURE_TITLE = "Failed to copy";
 const TOAST_DISMISS_MS = 2400;
-let resizeModulePromise = null;
+const FOCUS_HINT = "Click the page and try again";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message?.type === "clipsnap-prepare-capture") {
+    // Remove any previous toast and wait for a repaint so it is not captured.
+    removeToast();
+    requestAnimationFrame(() => requestAnimationFrame(() => sendResponse({ ok: true, devicePixelRatio: window.devicePixelRatio || 1 })));
+    return true;
+  }
+
   if (message?.type !== "clipsnap-copy-screenshot") {
     return false;
   }
@@ -25,56 +37,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 async function handleCopyRequest(payload) {
   const dataUrl = payload?.dataUrl;
-  const preset = payload?.preset || { label: "Full", targetWidth: null };
 
   try {
     if (!dataUrl) {
       throw new Error("Missing screenshot data");
     }
 
-    const image = await loadImage(dataUrl);
-    const sourceWidth = image.naturalWidth;
-    const sourceHeight = image.naturalHeight;
-    const { resolveTargetSize } = await getResizeModule();
-    const { width: targetWidth, height: targetHeight } = resolveTargetSize(
-      sourceWidth,
-      sourceHeight,
-      preset.targetWidth ?? null
-    );
+    await copyToClipboard(dataUrlToBlob(dataUrl));
 
-    const canvas = document.createElement("canvas");
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
+    showToast("success", SUCCESS_TITLE, payload.summary || "");
 
-    const context = canvas.getContext("2d", { alpha: true });
-    if (!context) {
-      throw new Error("Canvas rendering is not available");
-    }
-
-    context.drawImage(image, 0, 0, targetWidth, targetHeight);
-
-    const blob = await canvasToBlob(canvas);
-    await copyToClipboard(blob);
-
-    const wasResized = targetWidth !== sourceWidth;
-    showToast(
-      "success",
-      SUCCESS_TITLE,
-      preset.label === "Full"
-        ? ""
-        : wasResized
-          ? `Resized to ${targetWidth}px wide`
-          : "Copied at native size"
-    );
-
-    return {
-      ok: true,
-      width: targetWidth,
-      height: targetHeight,
-      resized: wasResized,
-    };
+    return { ok: true };
   } catch (error) {
-    const detail = stringifyError(error);
+    const detail = isFocusError(error) ? FOCUS_HINT : stringifyError(error);
     showToast("error", FAILURE_TITLE, detail ? detail.slice(0, 120) : "");
 
     return {
@@ -84,27 +59,22 @@ async function handleCopyRequest(payload) {
   }
 }
 
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.decoding = "async";
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error("The screenshot image could not be decoded"));
-    image.src = src;
-  });
+// clipboard.write rejects when focus is in the address bar or DevTools.
+function isFocusError(error) {
+  return error?.name === "NotAllowedError" || /not focused/i.test(stringifyError(error));
 }
 
-function canvasToBlob(canvas) {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        reject(new Error("The PNG blob could not be created"));
-        return;
-      }
+function dataUrlToBlob(dataUrl) {
+  const [header, base64 = ""] = dataUrl.split(",", 2);
+  const type = /^data:([^;,]+)/.exec(header)?.[1] || "image/png";
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
 
-      resolve(blob);
-    }, "image/png");
-  });
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], { type });
 }
 
 async function copyToClipboard(blob) {
@@ -119,11 +89,12 @@ async function copyToClipboard(blob) {
   ]);
 }
 
+function removeToast() {
+  document.getElementById(TOAST_HOST_ID)?.remove();
+}
+
 function showToast(kind, title, detail) {
-  const existingHost = document.getElementById(TOAST_HOST_ID);
-  if (existingHost) {
-    existingHost.remove();
-  }
+  removeToast();
 
   const host = document.createElement("div");
   host.id = TOAST_HOST_ID;
@@ -229,11 +200,4 @@ function stringifyError(error) {
 
   return String(error.message || error.reason || error);
 }
-
-function getResizeModule() {
-  if (!resizeModulePromise) {
-    resizeModulePromise = import(chrome.runtime.getURL("lib/resize.js"));
-  }
-
-  return resizeModulePromise;
 }

@@ -97,8 +97,7 @@ h1 {
   line-height: 1.6;
 }
 
-.settings-panel,
-.roadmap-panel {
+.settings-panel {
   padding: 26px 28px 24px;
 }
 
@@ -110,8 +109,7 @@ h1 {
   margin-bottom: 18px;
 }
 
-.panel-head h2,
-.roadmap-panel h2 {
+.panel-head h2 {
   margin-bottom: 0;
   font-size: 1.35rem;
   letter-spacing: -0.03em;
@@ -226,38 +224,6 @@ h1 {
   color: #f0f9ff;
 }
 
-.roadmap-panel {
-  display: grid;
-  gap: 6px;
-}
-
-.roadmap-list {
-  margin: 6px 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 12px;
-  color: var(--muted);
-}
-
-.roadmap-list li {
-  padding-left: 18px;
-  position: relative;
-  line-height: 1.5;
-}
-
-.roadmap-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(56, 189, 248, 0.95);
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
-}
-
 .status {
   min-height: 1.4em;
   margin: 0;
@@ -272,8 +238,7 @@ h1 {
   }
 
   .hero,
-  .settings-panel,
-  .roadmap-panel {
+  .settings-panel {
     padding-inline: 18px;
   }
 

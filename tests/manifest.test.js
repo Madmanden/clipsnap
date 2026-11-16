@@ -2,12 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
 
-test("manifest exposes the resize helper to content scripts", async () => {
-  const manifest = JSON.parse(await readFile(new URL("../manifest.json", import.meta.url), "utf8"));
-  const resourceEntry = manifest.web_accessible_resources?.find((entry) =>
-    entry.resources?.includes("lib/resize.js")
-  );
+const manifest = JSON.parse(await readFile(new URL("../manifest.json", import.meta.url), "utf8"));
 
-  assert.ok(resourceEntry, "expected lib/resize.js to be web-accessible");
-  assert.deepEqual(resourceEntry.matches, ["<all_urls>"]);
+test("manifest permissions are locked to the minimal set", () => {
+  assert.deepEqual([...manifest.permissions].sort(), ["activeTab", "clipboardWrite", "contextMenus", "scripting", "storage"]);
+  assert.equal(manifest.host_permissions, undefined);
+});
+
+test("manifest does not run or expose anything on every website", () => {
+  assert.equal(manifest.content_scripts, undefined);
+  assert.equal(manifest.web_accessible_resources, undefined);
 });

@@ -5,6 +5,7 @@ const presetList = document.getElementById("preset-list");
 const status = document.getElementById("status");
 const shortcutBadge = document.getElementById("shortcut-badge");
 const shortcutCopy = document.getElementById("shortcut-copy");
+const shortcutLink = document.getElementById("shortcut-link");
 
 let statusTimer = null;
 
@@ -92,6 +93,12 @@ form.addEventListener("change", async (event) => {
   }
 
   await savePreset(target.value);
+});
+
+// Pages cannot navigate to chrome:// URLs through a plain link; the tabs API can.
+shortcutLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  void chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
 });
 
 async function init() {

@@ -38,15 +38,16 @@ ClipSnap is released under the MIT License.
 
 - Click the ClipSnap toolbar icon to capture the current visible tab.
 - Or press `Alt+Shift+S`.
-- The screenshot is copied to the clipboard as PNG.
+- The screenshot is copied to the clipboard as PNG, and a toast shows its size, e.g. `1280×800 · 310 KB`.
 
 ## Customization
 
-Open the extension options page to change the default resize preset.
+Right-click the ClipSnap toolbar icon to switch resize preset, or open the extension options page.
 
 Available presets:
 
 - `Full`
+- `1x` (matches CSS pixels, so Retina captures are halved)
 - `1280px`
 - `960px`
 - `Half`
@@ -64,3 +65,4 @@ npm test
 - ClipSnap captures the visible area of the active tab only.
 - Chrome internal pages such as `chrome://` and `chrome-extension://` pages are restricted by the browser.
 - The default resize preset is `1280px`.
+- ClipSnap only needs `activeTab`, `scripting`, `clipboardWrite`, `contextMenus` and `storage`. It runs nothing on a page until you capture it.

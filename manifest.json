@@ -3,24 +3,17 @@
   "name": "ClipSnap",
   "version": "1.0.0",
   "description": "Capture the visible tab and copy a resized PNG to the clipboard instantly.",
-  "permissions": ["activeTab", "clipboardWrite", "scripting", "storage", "tabs"],
+  "permissions": [
+    "activeTab",
+    "clipboardWrite",
+    "contextMenus",
+    "scripting",
+    "storage"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["lib/resize.js"],
-      "matches": ["<all_urls>"]
-    }
-  ],
   "action": {
     "default_title": "ClipSnap",
     "default_icon": {
